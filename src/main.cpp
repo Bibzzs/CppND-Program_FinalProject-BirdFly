@@ -57,6 +57,8 @@ int main() {
 
     // Set the mouse callback function
     cv::setMouseCallback("Mouse Follower", onMouse, &leadBird);
+
+
     
     while (true) {
         
@@ -82,24 +84,11 @@ int main() {
 
         // Simulate Bird
         leadBird.fly((float)TIMESTEP);
-        if (leadBird.getUpdate())
-        {
-            for (auto& v : birds)
-            {
-                v->fly((float)TIMESTEP,&leadBird);
-            }
-        }
-        else
-        {
-            for (auto& v : birds)
-            {
-                v->fly((float)TIMESTEP);
-            }
-        }
         
-       
-
-
+        for (auto& v : birds)
+        {
+            v->fly((float)TIMESTEP, &leadBird);
+        }
 
         // Display the image in the window
         cv::imshow("Mouse Follower", image);

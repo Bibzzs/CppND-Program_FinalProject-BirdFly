@@ -19,6 +19,8 @@ class Bird : public FlyingObject
         float getBirdXpos();
         float getBirdYpos();
         void setbirdGraphicPosition(cv::Point point);
+        
+        void simulate();
         void fly(float TIMESTEP);
         void fly(float TIMESTEP, float xLead, float yLead);
         void fly(float TIMESTEP, LeaderBird* leadBird);

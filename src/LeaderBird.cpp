@@ -19,6 +19,11 @@ LeaderBird::~LeaderBird()
 {
 }
 
+void LeaderBird::simulate()
+{
+	int a = 0;
+}
+
 void LeaderBird::fly(float TIMESTEP)
 {
 	_prevPosX = _posX;

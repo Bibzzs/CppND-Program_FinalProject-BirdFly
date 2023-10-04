@@ -59,6 +59,8 @@ void Bird::setbirdGraphicPosition(cv::Point point)
     _birdGraphicPosition = point;
 }
 
+
+
 void Bird::fly(float timestep)
 {
     if (_posY > _sky.getHeight() )
@@ -75,6 +77,11 @@ void Bird::fly(float timestep)
     //setbirdGraphicPosition(cv::Point(0, _Y));
 }
 
+void Bird::simulate()
+{
+
+}
+
 void Bird::fly(float timestep, float xLead, float yLead)
 {
     float deltaY = yLead - _posY;
@@ -85,21 +92,36 @@ void Bird::fly(float timestep, float xLead, float yLead)
 }
 void Bird::fly(float timestep, LeaderBird* leadBird)
 {
-    float deltaY = leadBird->getPosY() - _posY;
-    float deltaX = leadBird->getPosX() - _posX;
-    float deltaVy = leadBird->getVy() - _vY;
-    float deltaVx = leadBird->getVx() - _vX;
-    _aY = 0.7 * deltaY + 0.9 * deltaVy;
-    _aX = 0.7 * deltaX + 0.9 * deltaVx;
-    float noiseVX = randomInRange(-0.020, 0.020)* deltaVx;
-    float noiseVY = randomInRange(-0.05, 0.05)* deltaVy;
-    _vY = _vY + _aY * timestep + noiseVY;
-    _vX = _vX + _aX * timestep + noiseVX;
-    float noiseX = randomInRange(-0.05, 0.05);
-    float noiseY = randomInRange(-0.1, 0.1);
-    _posY = 0.5 * _aY * timestep * timestep + _vY * timestep + _posY + noiseY;
-    _posX = 0.5 * _aX * timestep * timestep + _vX * timestep + _posX + noiseX;
-
+    if (leadBird->getUpdate())
+    {
+        float deltaY = leadBird->getPosY() - _posY;
+        float deltaX = leadBird->getPosX() - _posX;
+        float deltaVy = leadBird->getVy() - _vY;
+        float deltaVx = leadBird->getVx() - _vX;
+        _aY = 0.7 * deltaY + 0.9 * deltaVy;
+        _aX = 0.7 * deltaX + 0.9 * deltaVx;
+        float noiseVX = randomInRange(-0.020, 0.020) * deltaVx;
+        float noiseVY = randomInRange(-0.05, 0.05) * deltaVy;
+        _vY = _vY + _aY * timestep + noiseVY;
+        _vX = _vX + _aX * timestep + noiseVX;
+        float noiseX = randomInRange(-0.05, 0.05);
+        float noiseY = randomInRange(-0.1, 0.1);
+        _posY = 0.5 * _aY * timestep * timestep + _vY * timestep + _posY + noiseY;
+        _posX = 0.5 * _aX * timestep * timestep + _vX * timestep + _posX + noiseX;
+    }
+    else
+    {
+        if (_posY > _sky.getHeight())
+        {
+            _vY = 0;
+            _aY = 0;
+        }
+        else
+        {
+            _vY = _vY + _aY * timestep;
+            _posY = 0.5 * _aY * timestep * timestep + _vY * timestep + _posY;
+        }
+    }
 }
 
 

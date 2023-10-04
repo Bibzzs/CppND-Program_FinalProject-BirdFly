@@ -7,6 +7,7 @@ class LeaderBird : public FlyingObject
 public:
 	LeaderBird();
 	~LeaderBird();
+	void simulate();
 	void fly(float TIMESTEP);
 	void update(float x, float y);
 	bool getUpdate();
