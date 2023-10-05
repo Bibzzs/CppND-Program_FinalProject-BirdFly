@@ -13,9 +13,11 @@ public:
 	bool getUpdate();
 	float getVy();
 	float getVx();
-private:
-	float getBirdXpos();
-	float getBirdYpos();
+	bool getStatus();
+	void end();
+	
+	
+private:	
 	float _spdX;
 	float _spdY;
 	float _prevPosX;
@@ -23,6 +25,7 @@ private:
 	float _newPosX;
 	float _newPosY;
 	bool _budpated;
+	static bool _proceed;
 
 };
 

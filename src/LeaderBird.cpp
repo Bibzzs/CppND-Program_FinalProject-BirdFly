@@ -1,5 +1,6 @@
 #include "LeaderBird.h"
 
+bool LeaderBird::_proceed = true;
 LeaderBird::LeaderBird()
 {
 	_type = ObjectType::leaderBird;
@@ -10,13 +11,11 @@ LeaderBird::LeaderBird()
 	_prevPosX = _posX;
 	_prevPosY = _posY;
 	_budpated = false;
-	//**_targetPos[0] = _posX;
-	//&_targetPos[1] = _posY;
-
 }
 
 LeaderBird::~LeaderBird()
 {
+	
 }
 
 void LeaderBird::simulate()
@@ -26,6 +25,7 @@ void LeaderBird::simulate()
 
 void LeaderBird::fly(float TIMESTEP)
 {
+	std::lock_guard<std::mutex> lock(_mtx);
 	_prevPosX = _posX;
 	_prevPosY = _posY;
 	_posX = _newPosX;
@@ -48,16 +48,6 @@ void LeaderBird::update(float x, float y)
 	_newPosY = y;
 }
 
-float LeaderBird::getBirdXpos()
-{
-	return 0.0f;
-}
-
-float LeaderBird::getBirdYpos()
-{
-	return 0.0f;
-}
-
 float LeaderBird::getVy()
 {
 	return _spdY;
@@ -65,4 +55,12 @@ float LeaderBird::getVy()
 float LeaderBird::getVx()
 {
 	return _spdX;
+}
+void LeaderBird::end()
+{
+	_proceed = false;
+}
+bool LeaderBird::getStatus()
+{
+	return _proceed;
 }

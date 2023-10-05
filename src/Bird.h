@@ -6,35 +6,26 @@
 #include "LeaderBird.h"
 
 
-class Bird : public FlyingObject
+class Bird : public FlyingObject, public std::enable_shared_from_this<Bird>
 {
     public:
         Bird();
-        Bird(int id, float x);
+        Bird(float x);
         ~Bird();
-        int getBirdID();
-        void setBirdID(int id);
-        //int getNumberOfBird();
-        cv::Point getbirdGraphicPosition();
-        float getBirdXpos();
-        float getBirdYpos();
-        void setbirdGraphicPosition(cv::Point point);
         
         void simulate();
-        void fly(float TIMESTEP);
-        void fly(float TIMESTEP, float xLead, float yLead);
         void fly(float TIMESTEP, LeaderBird* leadBird);
 
-    private:
-        int _birdID;
-        cv::Point _birdGraphicPosition; 
-        //static int _numberOfBird;
+        // miscellaneous
+        std::shared_ptr<Bird> get_shared_this() { return shared_from_this(); }
+    
+private:
         float _aY;
         float _aX;
         float _vY;
         float _vX;
-        //LeaderBird birdChef;
+        bool _hit;
+        bool targetReached(LeaderBird* leadBird);
         
-
 };
 #endif

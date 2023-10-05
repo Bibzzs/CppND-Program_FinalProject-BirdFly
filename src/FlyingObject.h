@@ -27,7 +27,7 @@ public:
 	// typical behavior methods
 	virtual void fly();
 	virtual void simulate() {};
-	
+	int getLifePoint();
 
 protected:
 	int _id;
@@ -36,12 +36,12 @@ protected:
 	std::vector<std::thread> threads; // holds all threads that have been launched within this object
 	static std::mutex _mtx;
 	static Sky _sky;
-	static std::shared_ptr<std::vector<float>> _targetPos;
-
+	static int _lifePoint;
+	
 private:
 	static int _nbBird;
 	
-	
+
 };
 
 #endif

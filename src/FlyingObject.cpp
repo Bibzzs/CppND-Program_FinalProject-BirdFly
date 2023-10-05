@@ -1,7 +1,10 @@
 #include "FlyingObject.h"
+#include <algorithm>
 
 // init static variable
 int FlyingObject::_nbBird = 0;
+int FlyingObject::_lifePoint = 100;
+std::mutex FlyingObject::_mtx;
 
 FlyingObject::FlyingObject()
 {
@@ -20,6 +23,11 @@ FlyingObject::~FlyingObject()
 
 void FlyingObject::fly()
 {
+}
+
+int FlyingObject::getLifePoint()
+{
+	return std::max(_lifePoint,0);
 }
 
 int FlyingObject::getNumberOfBirds() { return _nbBird; }

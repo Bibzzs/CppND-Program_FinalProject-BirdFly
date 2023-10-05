@@ -1,6 +1,7 @@
 #include "Bird.h"
+#include <math.h>
 #include <random>
-
+#include<iostream>
 
 template <class T>
 T randomInRange(const T min, const T max)
@@ -14,11 +15,9 @@ T randomInRange(const T min, const T max)
     return distribution(gen);
 }
 
-//int Bird::_numberOfBird = 0;
 
-Bird::Bird(int ID, float x): _birdID(ID)
+Bird::Bird(float x)
 {
-    setbirdGraphicPosition(cv::Point(x, 0));
     _type = ObjectType::fastBird;
     _aY = 9.810;
     _vY = 0;
@@ -31,7 +30,12 @@ Bird::Bird(int ID, float x): _birdID(ID)
 Bird::Bird()
 {
     //_numberOfBird++;
-    setbirdGraphicPosition(cv::Point(0, 0));
+    _aY = 0;
+    _vY = 0;
+    _vX = 0;
+    _posX = 0;
+    _posY = 0;
+    
 }
 
 Bird::~Bird()
@@ -39,104 +43,69 @@ Bird::~Bird()
     //_numberOfBird--;
 }
 
-
-int Bird::getBirdID()
-{
-    return _birdID;
-}
-
-void Bird::setBirdID(int id)
-{
-}
-
-//int Bird::getNumberOfBird()
-//{
-//    return _numberOfBird;
-//}
-
-void Bird::setbirdGraphicPosition(cv::Point point)
-{
-    _birdGraphicPosition = point;
-}
-
-
-
-void Bird::fly(float timestep)
-{
-    if (_posY > _sky.getHeight() )
-    {
-        _vY = 0;
-        _aY = 0;
-    }
-    else
-    {
-        _vY = _vY + _aY * timestep;
-        _posY = 0.5 * _aY * timestep * timestep + _vY * timestep + _posY;
-    }
-    
-    //setbirdGraphicPosition(cv::Point(0, _Y));
-}
-
 void Bird::simulate()
 {
 
 }
 
-void Bird::fly(float timestep, float xLead, float yLead)
-{
-    float deltaY = yLead - _posY;
-    float deltaVy = (5) * timestep;
-    _aY = 0.2 * deltaY;
-    _vY = _vY + _aY * timestep;
-    _posY = 0.5 * _aY * timestep * timestep + _vY * timestep + _posY;
-}
 void Bird::fly(float timestep, LeaderBird* leadBird)
 {
-    if (leadBird->getUpdate())
+    while (leadBird->getStatus())
     {
-        float deltaY = leadBird->getPosY() - _posY;
-        float deltaX = leadBird->getPosX() - _posX;
-        float deltaVy = leadBird->getVy() - _vY;
-        float deltaVx = leadBird->getVx() - _vX;
-        _aY = 0.7 * deltaY + 0.9 * deltaVy;
-        _aX = 0.7 * deltaX + 0.9 * deltaVx;
-        float noiseVX = randomInRange(-0.020, 0.020) * deltaVx;
-        float noiseVY = randomInRange(-0.05, 0.05) * deltaVy;
-        _vY = _vY + _aY * timestep + noiseVY;
-        _vX = _vX + _aX * timestep + noiseVX;
-        float noiseX = randomInRange(-0.05, 0.05);
-        float noiseY = randomInRange(-0.1, 0.1);
-        _posY = 0.5 * _aY * timestep * timestep + _vY * timestep + _posY + noiseY;
-        _posX = 0.5 * _aX * timestep * timestep + _vX * timestep + _posX + noiseX;
-    }
-    else
-    {
-        if (_posY > _sky.getHeight())
+        // sleep at every iteration to reduce CPU usage
+        std::this_thread::sleep_for(std::chrono::milliseconds((int)(timestep * 1000)));
+        if (leadBird->getUpdate())
         {
-            _vY = 0;
-            _aY = 0;
+            std::unique_lock<std::mutex> lock(_mtx); // ensure that the x,y or speed of leadbird are not change during the controller calculation.
+            // std::cout << " calculation of bird # " << this->_birdID << std::endl; // DEBUG INFO
+            float deltaY = leadBird->getPosY() - _posY;
+            float deltaX = leadBird->getPosX() - _posX;
+            float deltaVy = leadBird->getVy() - _vY;
+            float deltaVx = leadBird->getVx() - _vX;
+            lock.unlock();
+            _aY = 0.7 * deltaY + 0.9 * deltaVy;
+            _aX = 0.7 * deltaX + 0.9 * deltaVx;
+            float noiseVX = randomInRange(-0.020, 0.020) * deltaVx;
+            float noiseVY = randomInRange(-0.05, 0.05) * deltaVy;
+            _vY = _vY + _aY * timestep + noiseVY;
+            _vX = _vX + _aX * timestep + noiseVX;
+            float noiseX = randomInRange(-0.05, 0.05);
+            float noiseY = randomInRange(-0.1, 0.1);
+            _posY = 0.5 * _aY * timestep * timestep + _vY * timestep + _posY + noiseY;
+            _posX = 0.5 * _aX * timestep * timestep + _vX * timestep + _posX + noiseX;
         }
         else
         {
-            _vY = _vY + _aY * timestep;
-            _posY = 0.5 * _aY * timestep * timestep + _vY * timestep + _posY;
+            if (_posY > _sky.getHeight())
+            {
+                _vY = 0;
+                _aY = 0;
+            }
+            else
+            {
+                _vY = _vY + _aY * timestep;
+                _posY = 0.5 * _aY * timestep * timestep + _vY * timestep + _posY;
+            }
         }
+        _hit = targetReached(leadBird);
+    }  
+}
+
+bool Bird::targetReached(LeaderBird* leadBird)
+{
+    std::unique_lock<std::mutex>  lock(_mtx);
+    double dist = sqrt(pow((this->_posX - leadBird->getPosX()), 2.0) + pow((this->_posY - leadBird->getPosY()), 2.0));
+    lock.unlock();
+
+    if (dist < 0.5) 
+    {
+        std::unique_lock<std::mutex>  lock(_mtx);
+        _lifePoint--;
+        lock.unlock();
+        return true;
     }
+    else { return false; }
+    
 }
 
-
-cv::Point Bird::getbirdGraphicPosition()
-{
-    return _birdGraphicPosition;
-}
-
-float Bird::getBirdXpos()
-{
-    return _posX;
-}
-
-float Bird::getBirdYpos()
-{
-    return _posY;
-}
 
