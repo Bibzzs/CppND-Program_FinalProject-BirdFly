@@ -12,6 +12,17 @@ When your life point is down to 0, then the game is over and your score appears.
 
 Hope you enjoy it !  :wink:
 
+## Programm architecture
+
+The main thread start by instanciated sky + leader bir + bird net. 
+FlyingObject is the base class of bird and leaderbird.
+The main thread launch oen thread by bird. 
+Then a while is called to loop and produce the graphic output. 
+Bird object are reading info from leaderbird to try to catch it. 
+Finally once the game is over, all the thred are joined and the program exits. 
+
+<img src="data/archi.png"/>
+
 ## Dependencies for Running Locally
 * cmake >= 2.8
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
@@ -32,6 +43,7 @@ Hope you enjoy it !  :wink:
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./traffic_simulation`.
+
 
 
 ## Project Tasks
