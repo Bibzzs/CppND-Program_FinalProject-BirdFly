@@ -14,5 +14,5 @@ add_definitions(${OpenCV_DEFINITIONS})
 file(GLOB project_SRCS src/*.cpp) #src/*.h
 
 # Add project executable
-add_executable(testt ${project_SRCS})
-target_link_libraries(testt ${OpenCV_LIBRARIES})
+add_executable(BirdAttack ${project_SRCS})
+target_link_libraries(BirdAttack ${OpenCV_LIBRARIES})
