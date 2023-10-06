@@ -7,7 +7,8 @@ This is the final project of the course [Udacity C++ Nanodegree Program](https:/
 This project is a home made little game : Bird Attack. 
 
 The goal of this game is to escape from birds as long as you can. You start with 100 life point. 
-When your life point is down to 0, then the game is over. 
+More you survive, more bird will be added. 
+When your life point is down to 0, then the game is over and your score appears. 
 
 Hope you enjoy it !  :wink:
 
