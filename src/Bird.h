@@ -10,21 +10,21 @@ class Bird : public FlyingObject, public std::enable_shared_from_this<Bird>
 {
     public:
         Bird();
-        Bird(float x);
+        Bird(double x);
         ~Bird();
         
         void simulate();
-        void fly(float TIMESTEP, LeaderBird* leadBird);
+        void fly(double TIMESTEP, LeaderBird* leadBird);
 
         // miscellaneous
         std::shared_ptr<Bird> get_shared_this() { return shared_from_this(); }
     
 private:
-        float _aY;
-        float _aX;
-        float _vY;
-        float _vX;
-        bool _hit;
+        double _aY;
+        double _aX;
+        double _vY;
+        double _vX;
+        bool _hit = false;
         bool targetReached(LeaderBird* leadBird);
         
 };

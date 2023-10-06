@@ -22,8 +22,8 @@ public:
 	~FlyingObject();
 	// getter and setter
 	int getNumberOfBirds();
-	float getPosX();
-	float getPosY();
+	double getPosX();
+	double getPosY();
 	// typical behavior methods
 	virtual void fly();
 	virtual void simulate() {};
@@ -31,7 +31,7 @@ public:
 
 protected:
 	int _id;
-	float _posX, _posY;
+	double _posX, _posY;
 	ObjectType _type;
 	std::vector<std::thread> threads; // holds all threads that have been launched within this object
 	static std::mutex _mtx;

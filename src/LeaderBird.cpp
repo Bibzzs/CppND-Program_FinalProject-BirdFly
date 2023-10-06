@@ -23,7 +23,7 @@ void LeaderBird::simulate()
 	int a = 0;
 }
 
-void LeaderBird::fly(float TIMESTEP)
+void LeaderBird::fly(double TIMESTEP)
 {
 	std::lock_guard<std::mutex> lock(_mtx);
 	_prevPosX = _posX;
@@ -42,17 +42,17 @@ bool LeaderBird::getUpdate()
 }
 
 
-void LeaderBird::update(float x, float y)
+void LeaderBird::update(double x, double y)
 {
 	_newPosX = x;
 	_newPosY = y;
 }
 
-float LeaderBird::getVy()
+double LeaderBird::getVy()
 {
 	return _spdY;
 }
-float LeaderBird::getVx()
+double LeaderBird::getVx()
 {
 	return _spdX;
 }

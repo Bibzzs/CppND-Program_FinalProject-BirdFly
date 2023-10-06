@@ -32,6 +32,6 @@ int FlyingObject::getLifePoint()
 
 int FlyingObject::getNumberOfBirds() { return _nbBird; }
 
-float FlyingObject::getPosX(){ return _posX;}
+double FlyingObject::getPosX(){ return _posX;}
 
-float FlyingObject::getPosY(){ return _posY;}
+double FlyingObject::getPosY(){ return _posY;}

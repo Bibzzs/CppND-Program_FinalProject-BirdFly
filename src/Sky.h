@@ -7,14 +7,14 @@
 class Sky
 {
 public:
-	Sky(int width, int height);
+	Sky(double width, double height);
 	~Sky();
 	// getter / setter
-	int getWidth();
-	int getHeight();
+	double getWidth();
+	double getHeight();
 private:
-	int _width;
-	int _height;
+	double _width;
+	double _height;
 };
 
 

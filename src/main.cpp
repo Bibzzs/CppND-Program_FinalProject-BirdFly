@@ -7,12 +7,12 @@
 #include "FlyingObject.h"
 #include "LeaderBird.h"
 
-constexpr float MAX_WIDTH = 500;
-#define MAX_LENGTH MAX_WIDTH
-constexpr float SQUARESIZE = 50;
-constexpr float COEFFCARTESIANTOGRAPHIC = MAX_WIDTH/SQUARESIZE;
-constexpr float TIMEREFRESH = 10; // ms;
-#define TIMESTEP TIMEREFRESH/1000 // s
+constexpr double MAX_WIDTH = 500;
+constexpr double MAX_LENGTH = MAX_WIDTH;
+constexpr double SQUARESIZE = 50;
+constexpr double COEFFCARTESIANTOGRAPHIC = MAX_WIDTH/SQUARESIZE;
+constexpr int TIMEREFRESH = 10; // ms;
+constexpr double TIMESTEP = (double)TIMEREFRESH / (double)1000; // s
 cv::Point whiteDotPosition(100, 100); // Initial position
 
 
@@ -29,8 +29,8 @@ void onMouse(int event, int x, int y, int flags, void* userdata) {
 // create SKY 
 Sky FlyingObject::_sky = Sky(MAX_WIDTH / COEFFCARTESIANTOGRAPHIC, MAX_LENGTH / COEFFCARTESIANTOGRAPHIC); 
 struct skyDimension {
-    float maxH = MAX_WIDTH / COEFFCARTESIANTOGRAPHIC;
-    float maxW = MAX_WIDTH / COEFFCARTESIANTOGRAPHIC;
+    double maxH = MAX_WIDTH / COEFFCARTESIANTOGRAPHIC;
+    double maxW = MAX_WIDTH / COEFFCARTESIANTOGRAPHIC;
 }; // definir une class ciel 
 
 
@@ -57,10 +57,10 @@ int main() {
     LeaderBird leadBird;
 
     // Create a window
-    cv::namedWindow("Mouse Follower");
+    cv::namedWindow("Bird attack");
 
     // Set the mouse callback function
-    cv::setMouseCallback("Mouse Follower", onMouse, &leadBird);
+    cv::setMouseCallback("Bird attack", onMouse, &leadBird);
 
     // init time counter
     std::chrono::time_point<std::chrono::system_clock> lastTLUpdate;
@@ -71,31 +71,42 @@ int main() {
     for (auto& v : birds)
     {
         
-        threads.emplace_back(std::thread(&Bird::fly, v, (float)TIMESTEP, &leadBird));
+        threads.emplace_back(std::thread(&Bird::fly, v, (double)TIMESTEP, &leadBird));
         
     }
     
-    
+    int localLifePoint = 100;
     while (true) {
         
-        // Create a black background image
-        cv::Mat image = cv::Mat::zeros(MAX_LENGTH, MAX_WIDTH, CV_8UC3);
+        // Create a  background image
+        cv::Mat image;
+        if (leadBird.getLifePoint() < localLifePoint)
+        {
+            image = cv::Mat::ones((int)MAX_LENGTH, (int)MAX_WIDTH, CV_8UC3)*255;
+            localLifePoint = leadBird.getLifePoint();
+        }
+        else
+        {
+            image = cv::Mat::zeros((int)MAX_LENGTH, (int)MAX_WIDTH, CV_8UC3);
+        }
+        
+        
 
         // Draw a white dot at the current mouse position
-        cv::circle(image, cv::Point(leadBird.getPosX() * COEFFCARTESIANTOGRAPHIC, leadBird.getPosY() * COEFFCARTESIANTOGRAPHIC), 10, cv::Scalar(255, 0, 255), -1);
+        cv::circle(image, cv::Point((int)(leadBird.getPosX() * COEFFCARTESIANTOGRAPHIC), (int)(leadBird.getPosY() * COEFFCARTESIANTOGRAPHIC)), 10, cv::Scalar(255, 0, 255), -1);
          
         // Draw birds
         for (auto& v : birds)
         {
-            cv::circle(image, cv::Point(v->getPosX() * COEFFCARTESIANTOGRAPHIC, v->getPosY() * COEFFCARTESIANTOGRAPHIC), 5, cv::Scalar(0, 255, 255), -1);
+            cv::circle(image, cv::Point((int)(v->getPosX() * COEFFCARTESIANTOGRAPHIC), (int)(v->getPosY() * COEFFCARTESIANTOGRAPHIC)), 5, cv::Scalar(0, 255, 255), -1);
         }
 
         // Add text in the top-left corner
         cv::putText(image, "To finish, press Esc", cv::Point(10, 30), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 255, 255), 2);
-        cv::putText(image, "Number of birds # " + std::to_string(leadBird.getNumberOfBirds()), cv::Point(10, 60), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 255, 255), 0.5);
-        cv::putText(image, "LifePoints = # " + std::to_string(leadBird.getLifePoint()), cv::Point(MAX_LENGTH / 2, 60), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 255, 255), 0.5);
+        cv::putText(image, "Number of birds # " + std::to_string(leadBird.getNumberOfBirds()), cv::Point(10, 60), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 255, 255), 1);
+        cv::putText(image, "LifePoints = # " + std::to_string(leadBird.getLifePoint()), cv::Point(int(MAX_LENGTH / 2), 60), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 255, 255), 1);
         // Simulate LeaderBird
-        leadBird.fly((float)TIMESTEP);
+        leadBird.fly(TIMESTEP);
         
         if (key == 27)  // Exit when the 'Esc' key is pressed
         {
@@ -104,8 +115,8 @@ int main() {
         }
         if (leadBird.getLifePoint() == 0)  // Exit when the 'Esc' key is pressed
         {
-            cv::putText(image, "GAME OVER ...", cv::Point(10, MAX_LENGTH / 2), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 255, 255), 2);
-            cv::putText(image, "score : " + std::to_string(leadBird.getNumberOfBirds()), cv::Point(10, MAX_LENGTH / 1.5), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 255, 255), 2);
+            cv::putText(image, "GAME OVER ...", cv::Point(10, (int)(MAX_LENGTH / 2)), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 255, 255), 2);
+            cv::putText(image, "score : " + std::to_string(leadBird.getNumberOfBirds()), cv::Point(10, (int)(MAX_LENGTH / 1.5)), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 255, 255), 2);
             leadBird.end(); // allow to end the bird thread 
             if (key == 27)  // Exit when the 'Esc' key is pressed
             {
@@ -115,17 +126,17 @@ int main() {
         }
 
         // Display the image in the window
-        cv::imshow("Mouse Follower", image);
+        cv::imshow("Bird attack", image);
 
         // Wait for a key event
         key = cv::waitKey(TIMEREFRESH); // ms
 
         // update number of bird
-        long timeSinceLastTLUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastTLUpdate).count();
+        long timeSinceLastTLUpdate = (long)(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastTLUpdate).count());
         if (timeSinceLastTLUpdate > cycleDuration && leadBird.getLifePoint() > 0)
         {
-            birds.push_back(std::make_shared<Bird>(0));
-            threads.emplace_back(std::thread(&Bird::fly, birds.back(), (float)TIMESTEP, &leadBird));
+            birds.push_back(std::make_shared<Bird>(int(leadBird.getPosX())));
+            threads.emplace_back(std::thread(&Bird::fly, birds.back(), (double)TIMESTEP, &leadBird));
             lastTLUpdate = std::chrono::system_clock::now();
             cycleDuration = std::max(cycleDuration / 1.05,100.0);
         }

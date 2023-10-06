@@ -16,14 +16,16 @@ T randomInRange(const T min, const T max)
 }
 
 
-Bird::Bird(float x)
+Bird::Bird(double x)
 {
     _type = ObjectType::fastBird;
-    _aY = 9.810;
-    _vY = 0;
-    _vX = 0;
+    _aY = (double)9.810;
+    _aX = (double)0;
+    _vY = (double)0;
+    _vX = (double)0;
     _posX = x;
-    _posY = 0;
+    _posY = (double)0;
+    _hit = false;
     
 }
 
@@ -31,10 +33,12 @@ Bird::Bird()
 {
     //_numberOfBird++;
     _aY = 0;
+    _aX = 0;
     _vY = 0;
     _vX = 0;
     _posX = 0;
     _posY = 0;
+    _hit = false;
     
 }
 
@@ -48,7 +52,7 @@ void Bird::simulate()
 
 }
 
-void Bird::fly(float timestep, LeaderBird* leadBird)
+void Bird::fly(double timestep, LeaderBird* leadBird)
 {
     while (leadBird->getStatus())
     {
@@ -58,19 +62,19 @@ void Bird::fly(float timestep, LeaderBird* leadBird)
         {
             std::unique_lock<std::mutex> lock(_mtx); // ensure that the x,y or speed of leadbird are not change during the controller calculation.
             // std::cout << " calculation of bird # " << this->_birdID << std::endl; // DEBUG INFO
-            float deltaY = leadBird->getPosY() - _posY;
-            float deltaX = leadBird->getPosX() - _posX;
-            float deltaVy = leadBird->getVy() - _vY;
-            float deltaVx = leadBird->getVx() - _vX;
+            double deltaY = leadBird->getPosY() - _posY;
+            double deltaX = leadBird->getPosX() - _posX;
+            double deltaVy = leadBird->getVy() - _vY;
+            double deltaVx = leadBird->getVx() - _vX;
             lock.unlock();
             _aY = 0.7 * deltaY + 0.9 * deltaVy;
             _aX = 0.7 * deltaX + 0.9 * deltaVx;
-            float noiseVX = randomInRange(-0.020, 0.020) * deltaVx;
-            float noiseVY = randomInRange(-0.05, 0.05) * deltaVy;
+            double noiseVX = randomInRange(-0.020, 0.020) * deltaVx;
+            double noiseVY = randomInRange(-0.05, 0.05) * deltaVy;
             _vY = _vY + _aY * timestep + noiseVY;
             _vX = _vX + _aX * timestep + noiseVX;
-            float noiseX = randomInRange(-0.05, 0.05);
-            float noiseY = randomInRange(-0.1, 0.1);
+            double noiseX = randomInRange(-0.05, 0.05);
+            double noiseY = randomInRange(-0.1, 0.1);
             _posY = 0.5 * _aY * timestep * timestep + _vY * timestep + _posY + noiseY;
             _posX = 0.5 * _aX * timestep * timestep + _vX * timestep + _posX + noiseX;
         }

@@ -8,22 +8,22 @@ public:
 	LeaderBird();
 	~LeaderBird();
 	void simulate();
-	void fly(float TIMESTEP);
-	void update(float x, float y);
+	void fly(double TIMESTEP);
+	void update(double x, double y);
 	bool getUpdate();
-	float getVy();
-	float getVx();
+	double getVy();
+	double getVx();
 	bool getStatus();
 	void end();
 	
 	
 private:	
-	float _spdX;
-	float _spdY;
-	float _prevPosX;
-	float _prevPosY;
-	float _newPosX;
-	float _newPosY;
+	double _spdX;
+	double _spdY;
+	double _prevPosX;
+	double _prevPosY;
+	double _newPosX;
+	double _newPosY;
 	bool _budpated;
 	static bool _proceed;
 
