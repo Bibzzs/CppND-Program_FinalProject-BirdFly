@@ -60,49 +60,22 @@ Throughout the Concurrency course, you have been developing a traffic simulation
 | Derived class functions override virtual base class functions. |One member function in an inherited class overrides a virtual base class member function.|:white_check_mark:|
 | Templates generalize functions in the project.| One function is declared with a template that allows it to accept a generic parameter.|:white_check_mark:|
 
+### Memory Management
+| Conformity | Specification | STATUS |
+| :--- | :---: | :---: |
+| The project makes use of references in function declarations. |At least two variables are defined as references, or two functions use pass-by-reference in the project code.| :white_check_mark:|
+|The project uses destructors appropriately.|At least one class that uses unmanaged dynamically allocated memory, along with any class that otherwise needs to modify state upon the termination of an object, uses a destructor.| N/A |
+| The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.| The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction.| :white_check_mark:|
+| The project follows the Rule of 5.|For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined.| N/A |
+|The project uses move semantics to move data, instead of copying it, where possible.| For classes with move constructors, the project returns objects of that class by value, and relies on the move constructor, instead of copying the object.| N/A |
+| The project uses smart pointers instead of raw pointers. | The project uses at least one smart pointer: `unique_ptr`, `shared_ptr`, or `weak_ptr`. The project does not use raw pointers. | :white_check_mark:|
 
-Memory Management
-Critères de conformité	Spécifications
-The project makes use of references in function declarations.
+### Concurrency
+| Conformity | Specification | STATUS |
+| :--- | :---: | :---: |
+| The project uses multithreading. | The project uses multiple threads in the execution. |:white_check_mark:|
+| A promise and future is used in the project. | A promise and future is used to pass data from a worker thread to a parent thread in the project code. | N/A |
+| A mutex or lock is used in the project. |A mutex or lock (e.g. `std::lock_guard` or `std::unique_lock`) is used to protect data that is shared across multiple threads in the project code. | :white_check_mark:|
+| A condition variable is used in the project. | A `std::condition_variable` is used in the project code to synchronize thread execution. | N/A |
 
-At least two variables are defined as references, or two functions use pass-by-reference in the project code.
 
-The project uses destructors appropriately.
-
-At least one class that uses unmanaged dynamically allocated memory, along with any class that otherwise needs to modify state upon the termination of an object, uses a destructor.
-
-The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.
-
-The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction.
-
-The project follows the Rule of 5.
-
-For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined.
-
-The project uses move semantics to move data, instead of copying it, where possible.
-
-For classes with move constructors, the project returns objects of that class by value, and relies on the move constructor, instead of copying the object.
-
-The project uses smart pointers instead of raw pointers.
-
-The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. The project does not use raw pointers.
-
-Concurrency
-Critères de conformité	Spécifications
-The project uses multithreading.
-
-The project uses multiple threads in the execution.
-
-A promise and future is used in the project.
-
-A promise and future is used to pass data from a worker thread to a parent thread in the project code.
-
-A mutex or lock is used in the project.
-
-A mutex or lock (e.g. std::lock_guard or `std::unique_lock) is used to protect data that is shared across multiple threads in the project code.
-
-A condition variable is used in the project.
-
-A std::condition_variable is used in the project code to synchronize thread execution.
-- **Task FP.5** : The method receive should use `std::unique_lock<std::mutex>` and `_condition.wait()` to wait for and receive new messages and pull them from the queue using move semantics. The received object should then be returned by the receive function. Then, add the implementation of the method `waitForGreen`, in which an infinite while-loop runs and repeatedly calls the `receive` function on the message queue. Once it receives `TrafficLightPhase::green`, the method returns.
-- **Task FP.6** : In class Intersection, add a private member `_trafficLight` of type `TrafficLight`. In method `Intersection::simulate()`, start the simulation of `_trafficLight`. Then, in method `Intersection::addVehicleToQueue`, use the methods `TrafficLight::getCurrentPhase` and `TrafficLight::waitForGreen` to block the execution until the traffic light turns green.
