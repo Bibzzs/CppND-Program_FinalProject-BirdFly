@@ -1,10 +1,15 @@
-# CPPND: Program a Concurrent Traffic Simulation
+# CPPND: CAPSTONE 
 
 <img src="data/traffic_simulation.gif"/>
 
-This is the project for the fourth course in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213): Concurrency. 
+This is the final project of the course [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213): Capstone. 
 
-Throughout the Concurrency course, you have been developing a traffic simulation in which vehicles are moving along streets and are crossing intersections. However, with increasing traffic in the city, traffic lights are needed for road safety. Each intersection will therefore be equipped with a traffic light. In this project, you will build a suitable and thread-safe communication protocol between vehicles and intersections to complete the simulation. Use your knowledge of concurrent programming (such as mutexes, locks and message queues) to implement the traffic lights and integrate them properly in the code base.
+This project is a home made little game : Bird Attack. 
+
+The goal of this game is to escape from birds as long as you can. You start with 100 life point. 
+When your life point is down to 0, then the game is over. 
+
+Hope you enjoy it !  :wink:
 
 ## Dependencies for Running Locally
 * cmake >= 2.8
@@ -26,6 +31,7 @@ Throughout the Concurrency course, you have been developing a traffic simulation
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./traffic_simulation`.
+
 
 ## Project Tasks
 ### README (All Rubric Points REQUIRED)
