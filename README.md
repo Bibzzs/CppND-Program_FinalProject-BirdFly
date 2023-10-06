@@ -1,6 +1,6 @@
 # CPPND: CAPSTONE 
 
-<img src="data/traffic_simulation.gif"/>
+<img src="data/BirdFlyVideo.gif"/>
 
 This is the final project of the course [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213): Capstone. 
 
