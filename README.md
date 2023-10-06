@@ -47,46 +47,19 @@ Throughout the Concurrency course, you have been developing a traffic simulation
 | The project reads data from a file and process the data, or the program writes data to a file. |The project reads data from an external file or writes data to a file as part of the necessary operation of the program. | N/A |
 | The project accepts user input and processes the input. |The project accepts input from a user as part of the necessary operation of the program. | :white_check_mark:|
 
+### Object Oriented Programming
+| Conformity | Specification | STATUS |
+| :--- | :---: | :---: |
+|The project uses Object Oriented Programming techniques.|The project code is organized into classes with class attributes to hold the data, and class methods to perform tasks.|:white_check_mark:|
+|Classes use appropriate access specifiers for class members.|All class data members are explicitly specified as public, protected, or private.|:white_check_mark:|
+| Class constructors utilize member initialization lists. | All class members that are set to argument values are initialized through member initialization lists.|:white_check_mark:|
+| Classes abstract implementation details from their interfaces. | All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change program state in undocumented ways.|:white_check_mark:|
+|Classes encapsulate behavior. |Appropriate data and functions are grouped into classes. Member data that is subject to an invariant is hidden from the user. State is accessed via member functions.|:white_check_mark:|
+| Classes follow an appropriate inheritance hierarchy. | Inheritance hierarchies are logical. Composition is used instead of inheritance when appropriate. Abstract classes are composed of pure virtual functions. Override functions are specified.| :white_check_mark:|
+|Overloaded functions allow the same function to operate on different parameters. | One function is overloaded with different signatures for the same function name.|:white_check_mark:|
+| Derived class functions override virtual base class functions. |One member function in an inherited class overrides a virtual base class member function.|:white_check_mark:|
+| Templates generalize functions in the project.| One function is declared with a template that allows it to accept a generic parameter.|:white_check_mark:|
 
-
-
-Object Oriented Programming
-Critères de conformité	Spécifications
-The project uses Object Oriented Programming techniques.
-
-The project code is organized into classes with class attributes to hold the data, and class methods to perform tasks.
-
-Classes use appropriate access specifiers for class members.
-
-All class data members are explicitly specified as public, protected, or private.
-
-Class constructors utilize member initialization lists.
-
-All class members that are set to argument values are initialized through member initialization lists.
-
-Classes abstract implementation details from their interfaces.
-
-All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change program state in undocumented ways.
-
-Classes encapsulate behavior.
-
-Appropriate data and functions are grouped into classes. Member data that is subject to an invariant is hidden from the user. State is accessed via member functions.
-
-Classes follow an appropriate inheritance hierarchy.
-
-Inheritance hierarchies are logical. Composition is used instead of inheritance when appropriate. Abstract classes are composed of pure virtual functions. Override functions are specified.
-
-Overloaded functions allow the same function to operate on different parameters.
-
-One function is overloaded with different signatures for the same function name.
-
-Derived class functions override virtual base class functions.
-
-One member function in an inherited class overrides a virtual base class member function.
-
-Templates generalize functions in the project.
-
-One function is declared with a template that allows it to accept a generic parameter.
 
 Memory Management
 Critères de conformité	Spécifications
