@@ -28,12 +28,132 @@ Throughout the Concurrency course, you have been developing a traffic simulation
 4. Run it: `./traffic_simulation`.
 
 ## Project Tasks
+### README
+| Conformity | Specification | STATUS |
+| :--- | :---: | :---: |
+| A README with instructions is included with the project | The README is included with the project and has instructions for building/running the project. If any additional libraries are needed to run the project, these are indicated with cross-platform installation instructions. You can submit your writeup as markdown or pdf. | :white_check_mark: |
+| The README indicates which project is chosen. | The README describes the project you have built. The README also indicates the file and class structure, along with the expected behavior or output of the program. | :white_check_mark: |
+| The README includes information about each rubric point addressed.|The README indicates which rubric points are addressed. The README also indicates where in the code (i.e. files and line numbers) that the rubric points are addressed.| :white_check_mark: |
 
-When the project is built initially, all traffic lights will be green. When you are finished with the project, your traffic simulation should run with red lights controlling traffic, just as in the .gif file above. See the classroom instruction and code comments for more details on each of these parts. 
 
-- **Task FP.1** : Define a class `TrafficLight` which is a child class of `TrafficObject`. The class shall have the public methods `void waitForGreen()` and `void simulate()` as well as `TrafficLightPhase getCurrentPhase()`, where `TrafficLightPhase` is an enum that can be either `red` or `green`. Also, add the private method `void cycleThroughPhases()`. Furthermore, there shall be the private member `_currentPhase` which can take `red` or `green` as its value.
-- **Task FP.2** : Implement the function with an infinite loop that measures the time between two loop cycles and toggles the current phase of the traffic light between red and green and sends an update method to the message queue using move semantics. The cycle duration should be a random value between 4 and 6 seconds. Also, the while-loop should use `std::this_thread::sleep_`for to wait 1ms between two cycles. Finally, the private method `cycleThroughPhases` should be started in a thread when the public method `simulate` is called. To do this, use the thread queue in the base class.
-- **Task FP.3** : Define a class `MessageQueue` which has the public methods send and receive. Send should take an rvalue reference of type TrafficLightPhase whereas receive should return this type. Also, the class should define an `std::dequeue` called `_queue`, which stores objects of type `TrafficLightPhase`. Finally, there should be an `std::condition_variable` as well as an `std::mutex` as private members.
-- **Task FP.4** : Implement the method `Send`, which should use the mechanisms `std::lock_guard<std::mutex>` as well as `_condition.notify_one()` to add a new message to the queue and afterwards send a notification. Also, in class `TrafficLight`, create a private member of type `MessageQueue` for messages of type `TrafficLightPhase` and use it within the infinite loop to push each new `TrafficLightPhase` into it by calling send in conjunction with move semantics.
+
+
+
+
+The README indicates which project is chosen.
+
+The README describes the project you have built.
+
+The README also indicates the file and class structure, along with the expected behavior or output of the program.
+
+The README includes information about each rubric point addressed.
+
+The README indicates which rubric points are addressed. The README also indicates where in the code (i.e. files and line numbers) that the rubric points are addressed.
+
+Compiling and Testing (All Rubric Points REQUIRED)
+Critères de conformité	Spécifications
+The submission must compile and run.
+
+The project code must compile and run without errors.
+
+We strongly recommend using cmake and make, as provided in the starter repos. If you choose another build system, the code must compile on any reviewer platform.
+
+Loops, Functions, I/O
+Critères de conformité	Spécifications
+The project demonstrates an understanding of C++ functions and control structures.
+
+A variety of control structures are used in the project.
+
+The project code is clearly organized into functions.
+
+The project reads data from a file and process the data, or the program writes data to a file.
+
+The project reads data from an external file or writes data to a file as part of the necessary operation of the program.
+
+The project accepts user input and processes the input.
+
+The project accepts input from a user as part of the necessary operation of the program.
+
+Object Oriented Programming
+Critères de conformité	Spécifications
+The project uses Object Oriented Programming techniques.
+
+The project code is organized into classes with class attributes to hold the data, and class methods to perform tasks.
+
+Classes use appropriate access specifiers for class members.
+
+All class data members are explicitly specified as public, protected, or private.
+
+Class constructors utilize member initialization lists.
+
+All class members that are set to argument values are initialized through member initialization lists.
+
+Classes abstract implementation details from their interfaces.
+
+All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change program state in undocumented ways.
+
+Classes encapsulate behavior.
+
+Appropriate data and functions are grouped into classes. Member data that is subject to an invariant is hidden from the user. State is accessed via member functions.
+
+Classes follow an appropriate inheritance hierarchy.
+
+Inheritance hierarchies are logical. Composition is used instead of inheritance when appropriate. Abstract classes are composed of pure virtual functions. Override functions are specified.
+
+Overloaded functions allow the same function to operate on different parameters.
+
+One function is overloaded with different signatures for the same function name.
+
+Derived class functions override virtual base class functions.
+
+One member function in an inherited class overrides a virtual base class member function.
+
+Templates generalize functions in the project.
+
+One function is declared with a template that allows it to accept a generic parameter.
+
+Memory Management
+Critères de conformité	Spécifications
+The project makes use of references in function declarations.
+
+At least two variables are defined as references, or two functions use pass-by-reference in the project code.
+
+The project uses destructors appropriately.
+
+At least one class that uses unmanaged dynamically allocated memory, along with any class that otherwise needs to modify state upon the termination of an object, uses a destructor.
+
+The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.
+
+The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction.
+
+The project follows the Rule of 5.
+
+For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined.
+
+The project uses move semantics to move data, instead of copying it, where possible.
+
+For classes with move constructors, the project returns objects of that class by value, and relies on the move constructor, instead of copying the object.
+
+The project uses smart pointers instead of raw pointers.
+
+The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. The project does not use raw pointers.
+
+Concurrency
+Critères de conformité	Spécifications
+The project uses multithreading.
+
+The project uses multiple threads in the execution.
+
+A promise and future is used in the project.
+
+A promise and future is used to pass data from a worker thread to a parent thread in the project code.
+
+A mutex or lock is used in the project.
+
+A mutex or lock (e.g. std::lock_guard or `std::unique_lock) is used to protect data that is shared across multiple threads in the project code.
+
+A condition variable is used in the project.
+
+A std::condition_variable is used in the project code to synchronize thread execution.
 - **Task FP.5** : The method receive should use `std::unique_lock<std::mutex>` and `_condition.wait()` to wait for and receive new messages and pull them from the queue using move semantics. The received object should then be returned by the receive function. Then, add the implementation of the method `waitForGreen`, in which an infinite while-loop runs and repeatedly calls the `receive` function on the message queue. Once it receives `TrafficLightPhase::green`, the method returns.
 - **Task FP.6** : In class Intersection, add a private member `_trafficLight` of type `TrafficLight`. In method `Intersection::simulate()`, start the simulation of `_trafficLight`. Then, in method `Intersection::addVehicleToQueue`, use the methods `TrafficLight::getCurrentPhase` and `TrafficLight::waitForGreen` to block the execution until the traffic light turns green.
